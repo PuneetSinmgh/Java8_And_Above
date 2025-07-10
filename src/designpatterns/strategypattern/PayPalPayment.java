@@ -4,6 +4,6 @@ public class PayPalPayment  implements PaymentProcessing {
 
     @Override
     public void pay( double amount) {
-        System.out.println("PayPal payment logic");
+        System.out.println("PayPal payment processed : "+ amount);
     }
 }

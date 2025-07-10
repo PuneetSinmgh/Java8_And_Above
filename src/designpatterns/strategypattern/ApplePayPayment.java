@@ -4,6 +4,6 @@ public class ApplePayPayment  implements PaymentProcessing {
 
     @Override
     public void pay( double amount) {
-        System.out.println("Apple Pay payment logic");
+        System.out.println("Apple Pay payment processed : "+ amount);
     }
 }
