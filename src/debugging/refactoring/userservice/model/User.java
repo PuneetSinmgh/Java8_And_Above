@@ -1,4 +1,4 @@
-package src.debugging.refactoring.model;
+package src.debugging.refactoring.userservice.model;
 
 /**
  * Simple User model containing name, email, and username.

@@ -1,6 +1,8 @@
-package src.debugging.refactoring.service;
+package src.debugging.refactoring.userservice.service;
 
-import src.debugging.refactoring.model.User;
+
+
+import src.debugging.refactoring.userservice.model.User;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
