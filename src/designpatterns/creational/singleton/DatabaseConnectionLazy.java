@@ -3,7 +3,7 @@ package src.designpatterns.creational.singleton;
 public class DatabaseConnectionLazy {
 
     // lazy initialization
-    private static DatabaseConnectionLazy databaseConnection ;
+    private static volatile DatabaseConnectionLazy databaseConnection ;
 
     // private constructor
     private DatabaseConnectionLazy(){
