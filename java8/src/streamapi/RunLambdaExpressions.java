@@ -1,4 +1,4 @@
-package java8.src;
+package java8.src.streamapi;
 
 public class RunLambdaExpressions {
 

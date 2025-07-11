@@ -1,8 +1,6 @@
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-package java8.src;
-
-import  java.util.*;
+package java8.src.streamapi;
 
 public class ImplementLogicToCallable {
     public static void main(String[] args) {
