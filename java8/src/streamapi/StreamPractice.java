@@ -2,6 +2,7 @@ package java8.src.streamapi;
 
 // Java Stream API Practice
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.*;
 
 public class StreamPractice {
@@ -27,5 +28,37 @@ public class StreamPractice {
         // Problem 5: Sum of numbers greater than 10
         int sum = l.stream().filter(x -> x>10 ).mapToInt(Integer::intValue).sum();
         System.out.println(sum);
+    }
+
+    // 1️⃣ Return a list of strings that start with the letter 'A' (case-insensitive)
+    public static List<String> filterStringsStartingWithA(List<String> input) {
+
+        return input.stream().map(String::toLowerCase).filter( s -> s.startsWith("A")).toList();
+    }
+
+    // 2️⃣ Given a list of integers, return the square of each number, sorted in descending order
+    public static List<Integer> squareAndSortDescending(List<Integer> numbers) {
+        // Your code here
+        return numbers.stream().map(n-> n*n).sorted(Collections.reverseOrder()).toList();
+    }
+
+    // 3️⃣ Count how many strings in the list have length greater than 5
+    public static long countLongStrings(List<String> words) {
+        // Your code here
+        return words.stream().filter(s -> s.length() > 5).count();
+    }
+
+    // 4️⃣ Given a list of words, return a map of word to its length
+    public static Map<String, Integer> mapWordToLength(List<String> words) {
+        // Your code here
+        //words.stream().map( s -> Map.entry(s, s.length())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return words.stream().collect(Collectors.toMap(Function.identity(), String::length));
+    }
+
+    // 5️⃣ Flatten a list of list of integers and return a list of unique sorted values
+    public static List<Integer> flattenAndDeduplicate(List<List<Integer>> nestedList) {
+        // Your code here
+
+        return nestedList.stream().flatMap(List::stream).distinct().sorted().toList();
     }
 }
