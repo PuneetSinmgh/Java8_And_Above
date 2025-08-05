@@ -8,9 +8,25 @@ import java8.src.streamapi.minidomain.model.Person;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SortingAndSearchingPerson {
+
+    record PersonTotal(String id, String name, double total) {
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof PersonTotal that)) return false;
+            return Double.compare(total, that.total) == 0 && Objects.equals(id, that.id) && Objects.equals(name, that.name);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id, name, total);
+        }
+    }
+
     public static void main(String[] args) {
 
         List<Person> people = List.of(
@@ -57,6 +73,16 @@ public class SortingAndSearchingPerson {
         System.out.println("top N Most Recent OrderIds of all the Persons");
         List<String> orderIds = topNRecentOrderIds(people, 5);
         orderIds.forEach(o -> System.out.println( o +" "));
+
+        // List SKU ever sold
+        System.out.println("List of SKUs sold");
+        List<String> skuList = allUniqueSkus(people);
+        skuList.forEach(o -> System.out.println( o +" "));
+
+        // List of PersonTotal i.e  spend per person, sort by spend DESC
+        System.out.println("List of PersonTotal i.e  spend per person, sort by spend DESC");
+        List<PersonTotal>  personTotalList = rankByTotalSpend( people);
+        personTotalList.forEach(pt -> System.out.println( pt.name() +" "));
     }
 
     public static List<Person> findPeopleByCountrySortedByName(List<Person> people, String country){
@@ -76,6 +102,27 @@ public class SortingAndSearchingPerson {
                 .sorted(Comparator.comparing(Order::getPlacedAt).reversed())
                 .limit(n)
                 .map(Order::getOrderId).toList();
+    }
+
+    // Find all unique SKUs ever purchased
+    public static List<String> allUniqueSkus(List<Person> people){
+        return people.stream().flatMap(p -> p.getOrders().stream())
+                .flatMap(order -> order.getItems().stream())
+                .map(OrderItem::getSku).distinct().toList();
+    }
+
+    // Total spend per person, sort by spend DESC
+    public static List<PersonTotal> rankByTotalSpend(List<Person> people){
+        // calculate total spend of the
+        return people.stream()
+                .collect(Collectors.toMap(Function.identity(), p -> p.getOrders().stream().flatMap(order -> order.getItems().stream()).toList() ))
+                .entrySet().stream()
+                .map( e-> {
+                    // calculate total value
+                    double total = e.getValue().stream()
+                            .mapToDouble(item -> item.getQuantity()*item.getUnitPrice()).sum();
+                    return new PersonTotal(e.getKey().getId(), e.getKey().getName(), total);
+                }).sorted().toList();
     }
 
 }
