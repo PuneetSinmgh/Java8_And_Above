@@ -6,26 +6,33 @@ import java8.src.streamapi.minidomain.model.OrderItem;
 import java8.src.streamapi.minidomain.model.Person;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class SortingAndSearchingPerson {
-
-    record PersonTotal(String id, String name, double total) {
-        @Override
-        public boolean equals(Object o) {
-            if (!(o instanceof PersonTotal that)) return false;
-            return Double.compare(total, that.total) == 0 && Objects.equals(id, that.id) && Objects.equals(name, that.name);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(id, name, total);
-        }
+record PersonTotal(String id, String name, double total) implements Comparable {
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof PersonTotal(String id1, String name1, double total1))) return false;
+        return Double.compare(total, total1) == 0 && Objects.equals(id, id1) && Objects.equals(name, name1);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, total);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        PersonTotal obj = (PersonTotal)o;
+        return Double.compare(total, obj.total );
+    }
+}
+
+public class SortingAndSearchingPerson {
 
     public static void main(String[] args) {
 
@@ -122,7 +129,15 @@ public class SortingAndSearchingPerson {
                     double total = e.getValue().stream()
                             .mapToDouble(item -> item.getQuantity()*item.getUnitPrice()).sum();
                     return new PersonTotal(e.getKey().getId(), e.getKey().getName(), total);
-                }).sorted().toList();
+                }).sorted(Comparator.reverseOrder()).toList();
+    }
+
+    public static List<String> ordersWithTag(List<Person> people, String tag){
+        // get orders which have tag="electronics"
+        return people.stream().flatMap(p -> p.getOrders().stream())
+                .filter(order ->
+                    order.getItems().stream().anyMatch(item -> item.getTags().contains(tag))
+                ).map(Order::getOrderId).toList();
     }
 
 }

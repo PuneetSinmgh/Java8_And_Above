@@ -41,7 +41,8 @@ public class StreamPractice {
 
         // count occurances of words
         List<String> words = List.of("apple", "banana", "apple", "orange", "banana", "apple");
-        Map<String, Long> wordCounts = words.stream().collect( Collectors.groupingBy( Function.identity(), Collectors.counting()));
+        Map<String, Long> wordCounts = words.stream()
+                .collect( Collectors.groupingBy( Function.identity(), Collectors.counting()));
 
         Map<String, Integer> productPrices = Map.of(
                 "Book", 120,
@@ -50,7 +51,9 @@ public class StreamPractice {
                 "Pencil", 10
         );
         // return a new map with only products that cost more than 100.
-        Map<String, Integer> filterredProducts = productPrices.entrySet().stream().filter( e-> e.getValue() > 100).collect(Collectors.toMap(e-> e.getKey(), e -> e.getValue()));
+        Map<String, Integer> filterredProducts = productPrices.entrySet().stream()
+                .filter( e-> e.getValue() > 100)
+                .collect(Collectors.toMap(e-> e.getKey(), e -> e.getValue()));
         // Output: {"Book"=120, "Bag"=200}
 
 
@@ -71,6 +74,18 @@ public class StreamPractice {
                 ));
 
     // Output: LinkedHashMap<String, Integer> sorted by score descending
+
+        int[] nums = new int[]{2,3,2,3,2,3,2,};
+        divideArray(nums);
+
+
+    }
+
+    public static boolean divideArray(int[] nums) {
+        Map<Integer, Long> hm = Arrays.stream(nums).boxed()
+                .collect( Collectors.groupingBy( n -> n, Collectors.counting())) ;
+
+        return hm.values().stream().map(aLong -> aLong != 2 ).findFirst().isPresent();
 
     }
 
